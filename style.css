@@ -1,42 +1,26 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body {
   font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f9;
 }
 
-body {
-  background: #f4f4f4;
+.app-header {
+  text-align: center;
   padding: 20px;
+  background: #4a90e2;
+  color: white;
 }
 
 .container {
-  max-width: 1000px;
+  width: 90%;
   margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-}
-
-.header button {
-  padding: 10px 15px;
-  border: none;
-  background: #007bff;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.header button:hover {
-  background: #0056b3;
+  margin: 20px 0;
 }
 
 .calendar {
@@ -46,120 +30,75 @@ body {
 }
 
 .day {
-  min-height: 120px;
-  background: #fafafa;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background: white;
   padding: 10px;
+  min-height: 70px;
+  border-radius: 8px;
   cursor: pointer;
   position: relative;
 }
 
 .day:hover {
-  background: #f0f8ff;
+  background: #e6f0ff;
 }
 
-.day-number {
-  font-weight: bold;
-  margin-bottom: 10px;
+/* COLORS */
+.day.green {
+  background: #c8f7c5;
 }
 
-.task-preview {
-  font-size: 12px;
+.day.red {
+  background: #ffb3b3;
+}
+
+/* preview text */
+.day small {
+  display: block;
+  font-size: 10px;
   margin-top: 5px;
+  color: #333;
+  word-break: break-word;
 }
 
+/* MODAL */
 .modal {
   display: none;
   position: fixed;
-  z-index: 1000;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0,0,0,0.5);
 }
 
 .modal-content {
   background: white;
-  margin: 10% auto;
+  width: 320px;
+  margin: 100px auto;
   padding: 20px;
-  width: 90%;
-  max-width: 500px;
   border-radius: 10px;
 }
 
 .close {
   float: right;
-  font-size: 28px;
   cursor: pointer;
+  font-size: 20px;
 }
 
-.task-input {
-  display: flex;
-  gap: 10px;
-  margin: 15px 0;
-}
-
-.task-input input {
-  flex: 1;
-  padding: 10px;
-}
-
-.task-input button {
-  padding: 10px 15px;
-  border: none;
-  background: green;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-#taskList {
-  list-style: none;
-}
-
+/* TASKS */
 #taskList li {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #f8f8f8;
-  border-radius: 5px;
+  margin: 5px 0;
+  padding: 6px;
+  border-radius: 6px;
 }
 
-.task-actions button {
+#taskList li.done {
+  background: #c8f7c5;
+}
+
+#taskList button {
   margin-left: 5px;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
   cursor: pointer;
 }
-
-.complete {
-  background: green;
-  color: white;
-}
-
-.missed {
-  background: red;
-  color: white;
-}
-
-.completed-task {
-  text-decoration: line-through;
-  color: green;
-}
-
-.missed-task {
-  text-decoration: line-through;
-  color: red;
-}
-
-@media (max-width: 768px) {
-  .calendar {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
