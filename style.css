@@ -162,3 +162,21 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.app-header {
+  text-align: center;
+  padding: 20px 10px;
+  background: #4a90e2;
+  color: white;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.app-header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
