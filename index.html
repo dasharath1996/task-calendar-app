@@ -8,6 +8,11 @@
 </head>
 <body>
 
+  <header class="app-header">
+    <h1>To Do List Calendar</h1>
+    <p>Plan your tasks by date</p>
+  </header>
+
   <div class="container">
     <div class="header">
       <button id="prevMonth">◀</button>
@@ -18,10 +23,11 @@
     <div class="calendar" id="calendar"></div>
   </div>
 
-  <!-- Task Modal -->
+  <!-- Modal -->
   <div class="modal" id="taskModal">
     <div class="modal-content">
       <span class="close">&times;</span>
+
       <h2 id="selectedDate"></h2>
 
       <div class="task-input">
