@@ -1,0 +1,41 @@
+# Monthly Task Calendar App
+
+## index.html
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Calendar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button id="prevMonth">◀</button>
+      <h1 id="monthYear"></h1>
+      <button id="nextMonth">▶</button>
+    </div>
+
+    <div class="calendar" id="calendar"></div>
+  </div>
+
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="selectedDate"></h2>
+
+      <div class="task-input">
+        <input type="text" id="taskInput" placeholder="Enter task" />
+        <button id="addTaskBtn">Add</button>
+      </div>
+
+      <ul id="taskList"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
