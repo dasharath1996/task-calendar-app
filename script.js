@@ -15,7 +15,7 @@ let editIndex = null;
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
 
-// -------------------- CALENDAR --------------------
+// ---------------- CALENDAR ----------------
 function renderCalendar() {
   calendar.innerHTML = "";
 
@@ -37,50 +37,62 @@ function renderCalendar() {
   for (let day = 1; day <= daysInMonth; day++) {
     const dateKey = `${year}-${month + 1}-${day}`;
 
+    const data = tasks[dateKey];
+
+    let preview = "";
+    let colorClass = "";
+
+    if (data) {
+      if (data.tasks?.length > 0) {
+        preview = data.tasks[0].text;
+      }
+      if (data.status) {
+        colorClass = data.status;
+      }
+    }
+
     calendar.innerHTML += `
-      <div class="day" onclick="openModal('${dateKey}')">
-        <span>${day}</span>
-        <small>${tasks[dateKey] ? tasks[dateKey].length + " task(s)" : ""}</small>
+      <div class="day ${colorClass}" onclick="openModal('${dateKey}')">
+        <div><b>${day}</b></div>
+        <small>${preview}</small>
       </div>
     `;
   }
 }
 
-// -------------------- OPEN MODAL --------------------
-window.openModal = function (date) {
+// ---------------- OPEN MODAL ----------------
+window.openModal = function(date) {
   selectedDate = date;
   selectedDateEl.innerText = date;
   taskInput.value = "";
   editIndex = null;
 
+  if (!tasks[selectedDate]) {
+    tasks[selectedDate] = { tasks: [], status: null };
+  }
+
   renderTasks();
   modal.style.display = "block";
 };
 
-// -------------------- CLOSE MODAL --------------------
-closeModal.onclick = () => {
-  modal.style.display = "none";
-};
-
+// ---------------- CLOSE MODAL ----------------
+closeModal.onclick = () => modal.style.display = "none";
 window.onclick = (e) => {
   if (e.target === modal) modal.style.display = "none";
 };
 
-// -------------------- ADD / UPDATE TASK --------------------
+// ---------------- ADD / EDIT TASK ----------------
 addTaskBtn.onclick = () => {
   if (!taskInput.value.trim()) return;
 
-  if (!tasks[selectedDate]) {
-    tasks[selectedDate] = [];
-  }
-
   if (editIndex !== null) {
-    // EDIT MODE
-    tasks[selectedDate][editIndex] = taskInput.value;
+    tasks[selectedDate].tasks[editIndex].text = taskInput.value;
     editIndex = null;
   } else {
-    // ADD MODE
-    tasks[selectedDate].push(taskInput.value);
+    tasks[selectedDate].tasks.push({
+      text: taskInput.value,
+      done: false
+    });
   }
 
   saveTasks();
@@ -89,50 +101,80 @@ addTaskBtn.onclick = () => {
   renderCalendar();
 };
 
-// -------------------- RENDER TASKS --------------------
+// ---------------- RENDER TASKS ----------------
 function renderTasks() {
   taskList.innerHTML = "";
 
-  if (!tasks[selectedDate]) return;
+  const data = tasks[selectedDate];
+  if (!data) return;
 
-  tasks[selectedDate].forEach((task, index) => {
+  data.tasks.forEach((task, index) => {
     const li = document.createElement("li");
 
+    if (task.done) li.classList.add("done");
+
     li.innerHTML = `
-      <span>${task}</span>
-      <button onclick="editTask(${index})">Edit</button>
-      <button onclick="deleteTask(${index})">Delete</button>
+      <span>${task.text}</span>
+      <div>
+        <button onclick="toggleDone(${index})">✔</button>
+        <button onclick="editTask(${index})">✏</button>
+        <button onclick="deleteTask(${index})" style="color:red;">❌</button>
+      </div>
     `;
 
     taskList.appendChild(li);
   });
+
+  // COLOR CONTROL
+  const box = document.createElement("div");
+  box.style.marginTop = "10px";
+
+  box.innerHTML = `
+    <button onclick="setColor('green')">Green</button>
+    <button onclick="setColor('red')">Red</button>
+    <button onclick="setColor(null)">Reset</button>
+  `;
+
+  taskList.appendChild(box);
 }
 
-// -------------------- EDIT TASK --------------------
-window.editTask = function (index) {
-  taskInput.value = tasks[selectedDate][index];
+// ---------------- COLOR SET ----------------
+window.setColor = function(color) {
+  tasks[selectedDate].status = color;
+  saveTasks();
+  renderCalendar();
+  renderTasks();
+};
+
+// ---------------- DONE ----------------
+window.toggleDone = function(index) {
+  tasks[selectedDate].tasks[index].done =
+    !tasks[selectedDate].tasks[index].done;
+
+  saveTasks();
+  renderTasks();
+};
+
+// ---------------- EDIT ----------------
+window.editTask = function(index) {
+  taskInput.value = tasks[selectedDate].tasks[index].text;
   editIndex = index;
 };
 
-// -------------------- DELETE TASK --------------------
-window.deleteTask = function (index) {
-  tasks[selectedDate].splice(index, 1);
-
-  if (tasks[selectedDate].length === 0) {
-    delete tasks[selectedDate];
-  }
-
+// ---------------- DELETE ----------------
+window.deleteTask = function(index) {
+  tasks[selectedDate].tasks.splice(index, 1);
   saveTasks();
   renderTasks();
   renderCalendar();
 };
 
-// -------------------- SAVE --------------------
+// ---------------- SAVE ----------------
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// -------------------- MONTH NAVIGATION --------------------
+// ---------------- MONTH NAV ----------------
 document.getElementById("prevMonth").onclick = () => {
   currentDate.setMonth(currentDate.getMonth() - 1);
   renderCalendar();
