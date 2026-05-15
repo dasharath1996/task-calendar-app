@@ -1,3 +1,5 @@
+// script.js
+
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 
@@ -5,12 +7,11 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc,
   onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-// ---------------- FIREBASE CONFIG ----------------
+// ================= FIREBASE CONFIG =================
 const firebaseConfig = {
   apiKey: "AIzaSyBNVbF3mBExC_fBGmOeKAiUZ2olIO7k_Lc",
   authDomain: "my-task-calendar-f87ad.firebaseapp.com",
@@ -20,17 +21,20 @@ const firebaseConfig = {
   appId: "1:1043925124339:web:81d71fba61eaf145ac2386"
 };
 
-// ---------------- INIT FIREBASE ----------------
+// ================= INITIALIZE FIREBASE =================
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-// ---------------- DOM ----------------
-const calendar = document.getElementById("calendar");
+// ================= DOM ELEMENTS =================
+const calendar =
+  document.getElementById("calendar");
 
-const monthYear = document.getElementById("monthYear");
+const monthYear =
+  document.getElementById("monthYear");
 
-const modal = document.getElementById("taskModal");
+const modal =
+  document.getElementById("taskModal");
 
 const closeModal =
   document.querySelector(".close");
@@ -47,7 +51,7 @@ const addTaskBtn =
 const taskList =
   document.getElementById("taskList");
 
-// ---------------- VARIABLES ----------------
+// ================= VARIABLES =================
 let currentDate = new Date();
 
 let selectedDate = null;
@@ -56,16 +60,21 @@ let editIndex = null;
 
 let tasks = {};
 
-// ---------------- FIREBASE DOC ----------------
+// ================= FIRESTORE DOC =================
 const docRef =
   doc(db, "calendar", "tasks");
 
-// ---------------- REALTIME SYNC ----------------
+// ================= REALTIME LISTENER =================
 onSnapshot(docRef, (snapshot) => {
 
   if (snapshot.exists()) {
 
-    tasks = snapshot.data().data || {};
+    tasks =
+      snapshot.data().data || {};
+
+  } else {
+
+    tasks = {};
 
   }
 
@@ -73,16 +82,27 @@ onSnapshot(docRef, (snapshot) => {
 
 });
 
-// ---------------- SAVE TASKS ----------------
+// ================= SAVE TASKS =================
 async function saveTasks() {
 
-  await setDoc(docRef, {
-    data: tasks
-  });
+  try {
+
+    await setDoc(docRef, {
+      data: tasks
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Error saving tasks:",
+      error
+    );
+
+  }
 
 }
 
-// ---------------- CALENDAR ----------------
+// ================= RENDER CALENDAR =================
 function renderCalendar() {
 
   calendar.innerHTML = "";
@@ -93,12 +113,7 @@ function renderCalendar() {
   const month =
     currentDate.getMonth();
 
-  const firstDay =
-    new Date(year, month, 1).getDay();
-
-  const daysInMonth =
-    new Date(year, month + 1, 0).getDate();
-
+  // MONTH TITLE
   monthYear.innerText =
     currentDate.toLocaleDateString(
       "en-US",
@@ -108,29 +123,70 @@ function renderCalendar() {
       }
     );
 
-  for (let i = 0; i < firstDay; i++) {
+  // FIRST DAY
+  const firstDay =
+    new Date(
+      year,
+      month,
+      1
+    ).getDay();
 
-    calendar.innerHTML += `<div></div>`;
+  // TOTAL DAYS
+  const daysInMonth =
+    new Date(
+      year,
+      month + 1,
+      0
+    ).getDate();
+
+  // EMPTY SPACES
+  for (
+    let i = 0;
+    i < firstDay;
+    i++
+  ) {
+
+    const emptyDiv =
+      document.createElement("div");
+
+    calendar.appendChild(
+      emptyDiv
+    );
 
   }
 
-  for (let day = 1; day <= daysInMonth; day++) {
+  // CREATE DAYS
+  for (
+    let day = 1;
+    day <= daysInMonth;
+    day++
+  ) {
 
     const dateKey =
       `${year}-${month + 1}-${day}`;
 
-    const data = tasks[dateKey];
+    const data =
+      tasks[dateKey];
 
     let preview = "";
 
     let colorClass = "";
 
+    // TASK PREVIEW
     if (data) {
 
-      if (data.tasks?.length > 0) {
+      if (
+        data.tasks &&
+        data.tasks.length > 0
+      ) {
 
         preview =
-          data.tasks[0].text;
+          data.tasks
+            .slice(0, 2)
+            .map(
+              task => task.text
+            )
+            .join(", ");
 
       }
 
@@ -143,32 +199,52 @@ function renderCalendar() {
 
     }
 
-    calendar.innerHTML += `
-      <div class="day ${colorClass}"
-           onclick="openModal('${dateKey}')">
+    // DAY DIV
+    const dayDiv =
+      document.createElement("div");
 
-        <div>
-          <b>${day}</b>
-        </div>
+    dayDiv.className =
+      `day ${colorClass}`;
 
-        <small>${preview}</small>
-
+    dayDiv.innerHTML = `
+      <div>
+        <b>${day}</b>
       </div>
+
+      <small>
+        ${preview}
+      </small>
     `;
+
+    // OPEN MODAL
+    dayDiv.onclick = () => {
+
+      openModal(dateKey);
+
+    };
+
+    calendar.appendChild(
+      dayDiv
+    );
+
   }
+
 }
 
-// ---------------- OPEN MODAL ----------------
-window.openModal = function(date) {
+// ================= OPEN MODAL =================
+window.openModal =
+function(date) {
 
   selectedDate = date;
 
-  selectedDateEl.innerText = date;
+  selectedDateEl.innerText =
+    date;
 
   taskInput.value = "";
 
   editIndex = null;
 
+  // CREATE DATE OBJECT
   if (!tasks[selectedDate]) {
 
     tasks[selectedDate] = {
@@ -180,13 +256,16 @@ window.openModal = function(date) {
 
   renderTasks();
 
-  modal.style.display = "block";
+  modal.style.display =
+    "block";
+
 };
 
-// ---------------- CLOSE MODAL ----------------
+// ================= CLOSE MODAL =================
 closeModal.onclick = () => {
 
-  modal.style.display = "none";
+  modal.style.display =
+    "none";
 
 };
 
@@ -194,30 +273,41 @@ window.onclick = (e) => {
 
   if (e.target === modal) {
 
-    modal.style.display = "none";
+    modal.style.display =
+      "none";
 
   }
 
 };
 
-// ---------------- ADD / EDIT ----------------
-addTaskBtn.onclick = async () => {
+// ================= ADD / EDIT TASK =================
+addTaskBtn.onclick =
+async () => {
 
-  if (!taskInput.value.trim()) return;
+  const text =
+    taskInput.value.trim();
 
-  if (editIndex !== null) {
+  if (!text) return;
+
+  // EDIT
+  if (
+    editIndex !== null
+  ) {
 
     tasks[selectedDate]
       .tasks[editIndex]
-      .text = taskInput.value;
+      .text = text;
 
     editIndex = null;
 
-  } else {
+  }
+
+  // ADD
+  else {
 
     tasks[selectedDate]
       .tasks.push({
-        text: taskInput.value,
+        text: text,
         done: false
       });
 
@@ -228,38 +318,50 @@ addTaskBtn.onclick = async () => {
   taskInput.value = "";
 
   renderTasks();
+
 };
 
-// ---------------- RENDER TASKS ----------------
+// ================= RENDER TASKS =================
 function renderTasks() {
 
   taskList.innerHTML = "";
 
-  const data = tasks[selectedDate];
+  const data =
+    tasks[selectedDate];
 
   if (!data) return;
 
-  data.tasks.forEach((task, index) => {
+  // TASKS
+  data.tasks.forEach(
+    (task, index) => {
 
     const li =
       document.createElement("li");
 
     if (task.done) {
 
-      li.classList.add("done");
+      li.classList.add(
+        "done"
+      );
 
     }
 
     li.innerHTML = `
-      <span>${task.text}</span>
+      <span>
+        ${task.text}
+      </span>
 
       <div>
 
-        <button onclick="toggleDone(${index})">
+        <button
+          onclick="toggleDone(${index})"
+        >
           ✔
         </button>
 
-        <button onclick="editTask(${index})">
+        <button
+          onclick="editTask(${index})"
+        >
           ✏
         </button>
 
@@ -281,7 +383,8 @@ function renderTasks() {
   const colorBox =
     document.createElement("div");
 
-  colorBox.style.marginTop = "10px";
+  colorBox.style.marginTop =
+    "15px";
 
   colorBox.innerHTML = `
     <button onclick="setColor('green')">
@@ -297,20 +400,15 @@ function renderTasks() {
     </button>
   `;
 
-  taskList.appendChild(colorBox);
+  taskList.appendChild(
+    colorBox
+  );
+
 }
 
-// ---------------- COLOR ----------------
-window.setColor = async function(color) {
-
-  tasks[selectedDate].status = color;
-
-  await saveTasks();
-
-};
-
-// ---------------- DONE ----------------
-window.toggleDone = async function(index) {
+// ================= TOGGLE DONE =================
+window.toggleDone =
+async function(index) {
 
   tasks[selectedDate]
     .tasks[index]
@@ -322,10 +420,12 @@ window.toggleDone = async function(index) {
   await saveTasks();
 
   renderTasks();
+
 };
 
-// ---------------- EDIT ----------------
-window.editTask = function(index) {
+// ================= EDIT TASK =================
+window.editTask =
+function(index) {
 
   taskInput.value =
     tasks[selectedDate]
@@ -333,20 +433,53 @@ window.editTask = function(index) {
       .text;
 
   editIndex = index;
+
 };
 
-// ---------------- DELETE ----------------
-window.deleteTask = async function(index) {
+// ================= DELETE TASK =================
+window.deleteTask =
+async function(index) {
 
   tasks[selectedDate]
     .tasks.splice(index, 1);
 
+  // REMOVE EMPTY DATE
+  if (
+    tasks[selectedDate]
+      .tasks.length === 0
+  ) {
+
+    delete tasks[selectedDate];
+
+  }
+
   await saveTasks();
 
   renderTasks();
+
 };
 
-// ---------------- MONTH NAVIGATION ----------------
+// ================= SET COLOR =================
+window.setColor =
+async function(color) {
+
+  if (!tasks[selectedDate]) {
+
+    tasks[selectedDate] = {
+      tasks: [],
+      status: null
+    };
+
+  }
+
+  tasks[selectedDate]
+    .status = color;
+
+  await saveTasks();
+
+};
+
+// ================= PREVIOUS MONTH =================
 document
 .getElementById("prevMonth")
 .onclick = () => {
@@ -359,6 +492,7 @@ document
 
 };
 
+// ================= NEXT MONTH =================
 document
 .getElementById("nextMonth")
 .onclick = () => {
@@ -370,3 +504,6 @@ document
   renderCalendar();
 
 };
+
+// ================= INITIAL LOAD =================
+renderCalendar();
