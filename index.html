@@ -3,25 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>To Do List Calendar</title>
+  <title>To Do Calendar</title>
 
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <header class="app-header">
-    <h1>To Do List Calendar</h1>
-    <p>Realtime Firebase Synced Calendar</p>
+    <h1>📅 To Do Calendar</h1>
+    <p>Manage your tasks beautifully across all devices</p>
   </header>
 
   <div class="container">
 
-    <div class="header">
+    <div class="top-bar">
       <button id="prevMonth">◀</button>
-      <h1 id="monthYear"></h1>
+
+      <h2 id="monthYear"></h2>
+
       <button id="nextMonth">▶</button>
     </div>
 
+    <!-- WEEK DAYS -->
+    <div class="weekdays">
+      <div>Sun</div>
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+      <div>Sat</div>
+    </div>
+
+    <!-- CALENDAR -->
     <div class="calendar" id="calendar"></div>
 
   </div>
@@ -36,6 +54,7 @@
       <h2 id="selectedDate"></h2>
 
       <div class="task-input">
+
         <input
           type="text"
           id="taskInput"
@@ -45,6 +64,7 @@
         <button id="addTaskBtn">
           Add
         </button>
+
       </div>
 
       <ul id="taskList"></ul>
