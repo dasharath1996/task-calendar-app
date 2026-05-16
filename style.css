@@ -571,7 +571,53 @@ body {
   color: white;
 }
 
-/* FOOTER */
+.color-buttons button:hover {
+
+  transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 768px) {
+
+  .calendar {
+
+    gap: 8px;
+  }
+
+  .day {
+
+    min-height: 95px;
+
+    padding: 8px;
+  }
+
+  .day-number {
+
+    font-size: 16px;
+  }
+
+  .app-header h1 {
+
+    font-size: 30px;
+  }
+
+  .header h1 {
+
+    font-size: 22px;
+  }
+
+  .stats-card h2 {
+
+    font-size: 30px;
+  }
+
+  .task-preview {
+
+    font-size: 10px;
+  }
+}
+/* ---FOOTER-- */
 
 .footer {
 
