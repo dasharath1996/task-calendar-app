@@ -5,12 +5,12 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc,
   onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-// ---------------- FIREBASE CONFIG ----------------
+/* FIREBASE CONFIG */
+
 const firebaseConfig = {
   apiKey: "AIzaSyBNVbF3mBExC_fBGmOeKAiUZ2olIO7k_Lc",
   authDomain: "my-task-calendar-f87ad.firebaseapp.com",
@@ -20,17 +20,24 @@ const firebaseConfig = {
   appId: "1:1043925124339:web:81d71fba61eaf145ac2386"
 };
 
-// ---------------- INIT FIREBASE ----------------
-const app = initializeApp(firebaseConfig);
+/* INIT */
 
-const db = getFirestore(app);
+const app =
+  initializeApp(firebaseConfig);
 
-// ---------------- DOM ----------------
-const calendar = document.getElementById("calendar");
+const db =
+  getFirestore(app);
 
-const monthYear = document.getElementById("monthYear");
+/* DOM */
 
-const modal = document.getElementById("taskModal");
+const calendar =
+  document.getElementById("calendar");
+
+const monthYear =
+  document.getElementById("monthYear");
+
+const modal =
+  document.getElementById("taskModal");
 
 const closeModal =
   document.querySelector(".close");
@@ -47,7 +54,17 @@ const addTaskBtn =
 const taskList =
   document.getElementById("taskList");
 
-// ---------------- VARIABLES ----------------
+const taskCount =
+  document.getElementById("taskCount");
+
+const completedCount =
+  document.getElementById("completedCount");
+
+const pendingCount =
+  document.getElementById("pendingCount");
+
+/* VARIABLES */
+
 let currentDate = new Date();
 
 let selectedDate = null;
@@ -56,33 +73,35 @@ let editIndex = null;
 
 let tasks = {};
 
-// ---------------- FIREBASE DOC ----------------
+/* FIRESTORE DOC */
+
 const docRef =
   doc(db, "calendar", "tasks");
 
-// ---------------- REALTIME SYNC ----------------
+/* REALTIME SYNC */
+
 onSnapshot(docRef, (snapshot) => {
 
   if (snapshot.exists()) {
 
-    tasks = snapshot.data().data || {};
-
+    tasks =
+      snapshot.data().data || {};
   }
 
   renderCalendar();
-
 });
 
-// ---------------- SAVE TASKS ----------------
+/* SAVE */
+
 async function saveTasks() {
 
   await setDoc(docRef, {
     data: tasks
   });
-
 }
 
-// ---------------- CALENDAR ----------------
+/* RENDER CALENDAR */
+
 function renderCalendar() {
 
   calendar.innerHTML = "";
@@ -108,18 +127,23 @@ function renderCalendar() {
       }
     );
 
+  /* EMPTY BOXES */
+
   for (let i = 0; i < firstDay; i++) {
 
-    calendar.innerHTML += `<div></div>`;
-
+    calendar.innerHTML +=
+      `<div></div>`;
   }
+
+  /* DAYS */
 
   for (let day = 1; day <= daysInMonth; day++) {
 
     const dateKey =
       `${year}-${month + 1}-${day}`;
 
-    const data = tasks[dateKey];
+    const data =
+      tasks[dateKey];
 
     let preview = "";
 
@@ -131,39 +155,96 @@ function renderCalendar() {
 
         preview =
           data.tasks[0].text;
-
       }
 
       if (data.status) {
 
         colorClass =
           data.status;
-
       }
-
     }
 
-    calendar.innerHTML += `
-      <div class="day ${colorClass}"
-           onclick="openModal('${dateKey}')">
+    const today =
+      new Date();
 
-        <div>
-          <b>${day}</b>
+    const isToday =
+      today.getDate() === day &&
+      today.getMonth() === month &&
+      today.getFullYear() === year;
+
+    calendar.innerHTML += `
+
+      <div
+        class="day ${colorClass} ${isToday ? 'today' : ''}"
+        onclick="openModal('${dateKey}')"
+      >
+
+        <div class="day-number">
+          ${day}
         </div>
 
-        <small>${preview}</small>
+        ${
+          data?.tasks?.length
+          ?
+          `<div class="task-badge">
+            ${data.tasks.length}
+          </div>`
+          :
+          ""
+        }
+
+        <div class="task-preview">
+
+          ${preview || ""}
+
+        </div>
 
       </div>
     `;
   }
+
+  updateStats();
 }
 
-// ---------------- OPEN MODAL ----------------
+/* STATS */
+
+function updateStats() {
+
+  let total = 0;
+
+  let completed = 0;
+
+  Object.values(tasks).forEach(day => {
+
+    day.tasks?.forEach(task => {
+
+      total++;
+
+      if (task.done) {
+
+        completed++;
+      }
+    });
+  });
+
+  taskCount.innerText =
+    total;
+
+  completedCount.innerText =
+    completed;
+
+  pendingCount.innerText =
+    total - completed;
+}
+
+/* OPEN MODAL */
+
 window.openModal = function(date) {
 
   selectedDate = date;
 
-  selectedDateEl.innerText = date;
+  selectedDateEl.innerText =
+    `Tasks for ${date}`;
 
   taskInput.value = "";
 
@@ -172,10 +253,11 @@ window.openModal = function(date) {
   if (!tasks[selectedDate]) {
 
     tasks[selectedDate] = {
+
       tasks: [],
+
       status: null
     };
-
   }
 
   renderTasks();
@@ -183,11 +265,11 @@ window.openModal = function(date) {
   modal.style.display = "block";
 };
 
-// ---------------- CLOSE MODAL ----------------
+/* CLOSE MODAL */
+
 closeModal.onclick = () => {
 
   modal.style.display = "none";
-
 };
 
 window.onclick = (e) => {
@@ -195,12 +277,11 @@ window.onclick = (e) => {
   if (e.target === modal) {
 
     modal.style.display = "none";
-
   }
-
 };
 
-// ---------------- ADD / EDIT ----------------
+/* ADD TASK */
+
 addTaskBtn.onclick = async () => {
 
   if (!taskInput.value.trim()) return;
@@ -209,7 +290,8 @@ addTaskBtn.onclick = async () => {
 
     tasks[selectedDate]
       .tasks[editIndex]
-      .text = taskInput.value;
+      .text =
+        taskInput.value;
 
     editIndex = null;
 
@@ -217,10 +299,11 @@ addTaskBtn.onclick = async () => {
 
     tasks[selectedDate]
       .tasks.push({
+
         text: taskInput.value,
+
         done: false
       });
-
   }
 
   await saveTasks();
@@ -230,12 +313,14 @@ addTaskBtn.onclick = async () => {
   renderTasks();
 };
 
-// ---------------- RENDER TASKS ----------------
+/* RENDER TASKS */
+
 function renderTasks() {
 
   taskList.innerHTML = "";
 
-  const data = tasks[selectedDate];
+  const data =
+    tasks[selectedDate];
 
   if (!data) return;
 
@@ -247,25 +332,28 @@ function renderTasks() {
     if (task.done) {
 
       li.classList.add("done");
-
     }
 
     li.innerHTML = `
+
       <span>${task.text}</span>
 
-      <div>
+      <div class="task-actions">
 
-        <button onclick="toggleDone(${index})">
-          ✔
+        <button
+          onclick="toggleDone(${index})"
+        >
+          ✅
         </button>
 
-        <button onclick="editTask(${index})">
-          ✏
+        <button
+          onclick="editTask(${index})"
+        >
+          ✏️
         </button>
 
         <button
           onclick="deleteTask(${index})"
-          style="color:red;"
         >
           ❌
         </button>
@@ -274,42 +362,11 @@ function renderTasks() {
     `;
 
     taskList.appendChild(li);
-
   });
-
-  // COLOR BUTTONS
-  const colorBox =
-    document.createElement("div");
-
-  colorBox.style.marginTop = "10px";
-
-  colorBox.innerHTML = `
-    <button onclick="setColor('green')">
-      Green
-    </button>
-
-    <button onclick="setColor('red')">
-      Red
-    </button>
-
-    <button onclick="setColor(null)">
-      Reset
-    </button>
-  `;
-
-  taskList.appendChild(colorBox);
 }
 
-// ---------------- COLOR ----------------
-window.setColor = async function(color) {
+/* DONE */
 
-  tasks[selectedDate].status = color;
-
-  await saveTasks();
-
-};
-
-// ---------------- DONE ----------------
 window.toggleDone = async function(index) {
 
   tasks[selectedDate]
@@ -324,7 +381,8 @@ window.toggleDone = async function(index) {
   renderTasks();
 };
 
-// ---------------- EDIT ----------------
+/* EDIT */
+
 window.editTask = function(index) {
 
   taskInput.value =
@@ -335,7 +393,8 @@ window.editTask = function(index) {
   editIndex = index;
 };
 
-// ---------------- DELETE ----------------
+/* DELETE */
+
 window.deleteTask = async function(index) {
 
   tasks[selectedDate]
@@ -346,7 +405,18 @@ window.deleteTask = async function(index) {
   renderTasks();
 };
 
-// ---------------- MONTH NAVIGATION ----------------
+/* STATUS COLOR */
+
+window.setColor = async function(color) {
+
+  tasks[selectedDate]
+    .status = color;
+
+  await saveTasks();
+};
+
+/* MONTH NAVIGATION */
+
 document
 .getElementById("prevMonth")
 .onclick = () => {
@@ -356,7 +426,6 @@ document
   );
 
   renderCalendar();
-
 };
 
 document
@@ -368,5 +437,4 @@ document
   );
 
   renderCalendar();
-
 };
