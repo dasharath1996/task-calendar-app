@@ -1,3 +1,7 @@
+/* ========================= */
+/* UPDATED style.css */
+/* ========================= */
+
 * {
 
   margin: 0;
@@ -22,9 +26,29 @@ body {
   overflow-x: hidden;
 
   color: white;
+
+  animation:
+    fadePage 0.7s ease;
 }
 
-/* ANIMATED BACKGROUND */
+@keyframes fadePage {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(10px);
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* BACKGROUND */
 
 .bg-animation {
 
@@ -54,7 +78,7 @@ body {
 
   text-align: center;
 
-  padding: 35px 20px;
+  padding: 35px 20px 10px;
 }
 
 .app-header h1 {
@@ -67,6 +91,21 @@ body {
 .app-header p {
 
   margin-top: 10px;
+
+  opacity: 0.9;
+}
+
+/* LIVE CLOCK */
+
+.live-clock {
+
+  text-align: center;
+
+  margin-bottom: 25px;
+
+  font-size: 18px;
+
+  font-weight: 500;
 
   opacity: 0.9;
 }
@@ -127,12 +166,7 @@ body {
   font-size: 40px;
 }
 
-.stats-card span {
-
-  opacity: 0.9;
-}
-
-/* MONTH HEADER */
+/* HEADER */
 
 .header {
 
@@ -177,6 +211,54 @@ body {
   background: rgba(255,255,255,0.2);
 }
 
+/* PROGRESS */
+
+.progress-section {
+
+  margin-bottom: 25px;
+}
+
+.progress-info {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+
+  width: 100%;
+
+  height: 14px;
+
+  background:
+    rgba(255,255,255,0.1);
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.progress-fill {
+
+  width: 0%;
+
+  height: 100%;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #00c6ff,
+      #0072ff
+    );
+
+  transition: 0.4s ease;
+}
+
 /* WEEKDAYS */
 
 .weekdays {
@@ -190,8 +272,6 @@ body {
   text-align: center;
 
   font-weight: 600;
-
-  opacity: 0.9;
 }
 
 /* CALENDAR */
@@ -227,8 +307,6 @@ body {
   cursor: pointer;
 
   position: relative;
-
-  overflow: hidden;
 }
 
 .day:hover {
@@ -236,6 +314,10 @@ body {
   transform:
     translateY(-5px)
     scale(1.02);
+
+  box-shadow:
+    0 0 20px rgba(255,255,255,0.2),
+    0 8px 20px rgba(0,0,0,0.3);
 }
 
 .day.today {
@@ -267,8 +349,6 @@ body {
   margin-top: 10px;
 
   font-size: 12px;
-
-  opacity: 0.9;
 
   word-break: break-word;
 }
@@ -386,8 +466,6 @@ body {
   border: 1px solid #ddd;
 
   outline: none;
-
-  font-size: 14px;
 }
 
 .task-input button {
@@ -403,13 +481,6 @@ body {
   border-radius: 12px;
 
   cursor: pointer;
-
-  transition: 0.3s;
-}
-
-.task-input button:hover {
-
-  transform: scale(1.05);
 }
 
 /* TASK LIST */
@@ -434,8 +505,6 @@ body {
   justify-content: space-between;
 
   align-items: center;
-
-  gap: 10px;
 }
 
 #taskList li.done {
@@ -461,13 +530,17 @@ body {
   border-radius: 8px;
 
   cursor: pointer;
-
-  transition: 0.2s;
 }
 
-.task-actions button:hover {
+/* EMPTY STATE */
 
-  transform: scale(1.08);
+.empty-state {
+
+  text-align: center;
+
+  padding: 30px 10px;
+
+  color: #777;
 }
 
 /* COLOR BUTTONS */
@@ -496,56 +569,8 @@ body {
   background: #243b55;
 
   color: white;
-
-  transition: 0.3s;
 }
 
-.color-buttons button:hover {
-
-  transform: scale(1.05);
-}
-
-/* RESPONSIVE */
-
-@media(max-width: 768px) {
-
-  .calendar {
-
-    gap: 8px;
-  }
-
-  .day {
-
-    min-height: 95px;
-
-    padding: 8px;
-  }
-
-  .day-number {
-
-    font-size: 16px;
-  }
-
-  .app-header h1 {
-
-    font-size: 30px;
-  }
-
-  .header h1 {
-
-    font-size: 22px;
-  }
-
-  .stats-card h2 {
-
-    font-size: 30px;
-  }
-
-  .task-preview {
-
-    font-size: 10px;
-  }
-}
 /* FOOTER */
 
 .footer {
@@ -562,30 +587,11 @@ body {
     rgba(255,255,255,0.08);
 
   backdrop-filter: blur(10px);
-
-  border-top:
-    1px solid rgba(255,255,255,0.1);
-}
-
-.footer-content {
-
-  max-width: 1200px;
-
-  margin: auto;
 }
 
 .footer p {
 
   margin: 6px 0;
-
-  color: rgba(255,255,255,0.9);
-
-  font-size: 14px;
-}
-
-.footer strong {
-
-  color: #ffffff;
 }
 
 .footer a {
@@ -596,7 +602,7 @@ body {
 
   text-decoration: none;
 
-  color: #ffffff;
+  color: white;
 
   font-weight: 600;
 
@@ -606,14 +612,29 @@ body {
 
   background:
     rgba(255,255,255,0.12);
-
-  transition: 0.3s;
 }
 
-.footer a:hover {
+/* RESPONSIVE */
 
-  transform: translateY(-3px);
+@media(max-width: 768px) {
 
-  background:
-    rgba(255,255,255,0.2);
+  .calendar {
+
+    gap: 8px;
+  }
+
+  .day {
+
+    min-height: 95px;
+  }
+
+  .app-header h1 {
+
+    font-size: 30px;
+  }
+
+  .header h1 {
+
+    font-size: 22px;
+  }
 }
