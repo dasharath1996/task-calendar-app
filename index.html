@@ -1,27 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
   <title>To Do List Calendar</title>
 
-  <link rel="stylesheet" href="style.css"/>
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
 </head>
+
 <body>
 
+  <div class="bg-animation"></div>
+
   <header class="app-header">
-    <h1>To Do List Calendar</h1>
-    <p>Realtime Firebase Synced Calendar</p>
+
+    <h1>✨ To Do List Calendar</h1>
+
+    <p>
+      Beautiful realtime task management with Firebase sync
+    </p>
+
   </header>
 
   <div class="container">
 
-    <div class="header">
-      <button id="prevMonth">◀</button>
-      <h1 id="monthYear"></h1>
-      <button id="nextMonth">▶</button>
+    <!-- STATS -->
+    <div class="top-bar">
+
+      <div class="stats-card">
+
+        <h2 id="taskCount">0</h2>
+
+        <span>Total Tasks</span>
+
+      </div>
+
+      <div class="stats-card">
+
+        <h2 id="completedCount">0</h2>
+
+        <span>Completed</span>
+
+      </div>
+
+      <div class="stats-card">
+
+        <h2 id="pendingCount">0</h2>
+
+        <span>Pending</span>
+
+      </div>
+
     </div>
 
+    <!-- MONTH NAV -->
+    <div class="header">
+
+      <button id="prevMonth">❮</button>
+
+      <h1 id="monthYear"></h1>
+
+      <button id="nextMonth">❯</button>
+
+    </div>
+
+    <!-- WEEKDAYS -->
+    <div class="weekdays">
+
+      <div>Sun</div>
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+      <div>Sat</div>
+
+    </div>
+
+    <!-- CALENDAR -->
     <div class="calendar" id="calendar"></div>
 
   </div>
@@ -36,24 +112,46 @@
       <h2 id="selectedDate"></h2>
 
       <div class="task-input">
+
         <input
           type="text"
           id="taskInput"
-          placeholder="Enter task"
+          placeholder="Enter your task..."
         />
 
         <button id="addTaskBtn">
           Add
         </button>
+
       </div>
 
       <ul id="taskList"></ul>
+
+      <!-- STATUS -->
+      <div class="color-buttons">
+
+        <button onclick="setColor('green')">
+          ✅ Productive
+        </button>
+
+        <button onclick="setColor('red')">
+          ❌ Busy
+        </button>
+
+        <button onclick="setColor(null)">
+          🔄 Reset
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
-  <script type="module" src="script.js"></script>
+  <script
+    type="module"
+    src="script.js"
+  ></script>
 
 </body>
 </html>
