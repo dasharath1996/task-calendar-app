@@ -12,18 +12,12 @@ from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 /* FIREBASE CONFIG */
 
 const firebaseConfig = {
-
-  apiKey: "YOUR_API_KEY",
-
-  authDomain: "YOUR_AUTH_DOMAIN",
-
-  projectId: "YOUR_PROJECT_ID",
-
-  storageBucket: "YOUR_STORAGE_BUCKET",
-
-  messagingSenderId: "YOUR_SENDER_ID",
-
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBNVbF3mBExC_fBGmOeKAiUZ2olIO7k_Lc",
+  authDomain: "my-task-calendar-f87ad.firebaseapp.com",
+  projectId: "my-task-calendar-f87ad",
+  storageBucket: "my-task-calendar-f87ad.firebasestorage.app",
+  messagingSenderId: "1043925124339",
+  appId: "1:1043925124339:web:81d71fba61eaf145ac2386"
 };
 
 /* INIT */
