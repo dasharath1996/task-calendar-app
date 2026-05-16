@@ -1,3 +1,7 @@
+\<!-- ========================= -->
+<!-- UPDATED index.html -->
+<!-- ========================= -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,6 +46,12 @@
 
   </header>
 
+  <!-- LIVE CLOCK -->
+  <div
+    class="live-clock"
+    id="liveClock"
+  ></div>
+
   <div class="container">
 
     <!-- STATS -->
@@ -84,6 +94,28 @@
 
     </div>
 
+    <!-- PROGRESS -->
+    <div class="progress-section">
+
+      <div class="progress-info">
+
+        <span>Task Progress</span>
+
+        <span id="progressText">0%</span>
+
+      </div>
+
+      <div class="progress-bar">
+
+        <div
+          class="progress-fill"
+          id="progressFill"
+        ></div>
+
+      </div>
+
+    </div>
+
     <!-- WEEKDAYS -->
     <div class="weekdays">
 
@@ -98,12 +130,18 @@
     </div>
 
     <!-- CALENDAR -->
-    <div class="calendar" id="calendar"></div>
+    <div
+      class="calendar"
+      id="calendar"
+    ></div>
 
   </div>
 
   <!-- MODAL -->
-  <div class="modal" id="taskModal">
+  <div
+    class="modal"
+    id="taskModal"
+  >
 
     <div class="modal-content">
 
@@ -147,29 +185,32 @@
     </div>
 
   </div>
-<footer class="footer">
 
-  <div class="footer-content">
+  <!-- FOOTER -->
+  <footer class="footer">
 
-    <p>
-      © 2026 All Rights Reserved
-    </p>
+    <div class="footer-content">
 
-    <p>
-      Developed with ❤️ by
-      <strong>Mr. Dasharath Kumar</strong>
-    </p>
+      <p>
+        © 2026 All Rights Reserved
+      </p>
 
-    <a
-      href="https://www.linkedin.com/in/dasharath-kumar-74983a211/"
-      target="_blank"
-    >
-      Connect on LinkedIn
-    </a>
+      <p>
+        Developed with ❤️ by
+        <strong>Mr. Dasharath Kumar</strong>
+      </p>
 
-  </div>
+      <a
+        href="https://www.linkedin.com/in/YOUR-LINKEDIN-USERNAME/"
+        target="_blank"
+      >
+        Connect on LinkedIn
+      </a>
 
-</footer>
+    </div>
+
+  </footer>
+
   <script
     type="module"
     src="script.js"
