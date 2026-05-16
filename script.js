@@ -9,18 +9,28 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
+/* ========================= */
 /* FIREBASE CONFIG */
+/* ========================= */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBNVbF3mBExC_fBGmOeKAiUZ2olIO7k_Lc",
-  authDomain: "my-task-calendar-f87ad.firebaseapp.com",
-  projectId: "my-task-calendar-f87ad",
-  storageBucket: "my-task-calendar-f87ad.firebasestorage.app",
-  messagingSenderId: "1043925124339",
-  appId: "1:1043925124339:web:81d71fba61eaf145ac2386"
+
+  apiKey: "YOUR_API_KEY",
+
+  authDomain: "YOUR_AUTH_DOMAIN",
+
+  projectId: "YOUR_PROJECT_ID",
+
+  storageBucket: "YOUR_STORAGE_BUCKET",
+
+  messagingSenderId: "YOUR_SENDER_ID",
+
+  appId: "YOUR_APP_ID"
 };
 
-/* INIT */
+/* ========================= */
+/* INIT FIREBASE */
+/* ========================= */
 
 const app =
   initializeApp(firebaseConfig);
@@ -28,7 +38,9 @@ const app =
 const db =
   getFirestore(app);
 
-/* DOM */
+/* ========================= */
+/* DOM ELEMENTS */
+/* ========================= */
 
 const calendar =
   document.getElementById("calendar");
@@ -63,9 +75,18 @@ const completedCount =
 const pendingCount =
   document.getElementById("pendingCount");
 
-/* VARIABLES */
+const progressFill =
+  document.getElementById("progressFill");
 
-let currentDate = new Date();
+const progressText =
+  document.getElementById("progressText");
+
+/* ========================= */
+/* VARIABLES */
+/* ========================= */
+
+let currentDate =
+  new Date();
 
 let selectedDate = null;
 
@@ -73,12 +94,16 @@ let editIndex = null;
 
 let tasks = {};
 
+/* ========================= */
 /* FIRESTORE DOC */
+/* ========================= */
 
 const docRef =
   doc(db, "calendar", "tasks");
 
+/* ========================= */
 /* REALTIME SYNC */
+/* ========================= */
 
 onSnapshot(docRef, (snapshot) => {
 
@@ -91,16 +116,22 @@ onSnapshot(docRef, (snapshot) => {
   renderCalendar();
 });
 
-/* SAVE */
+/* ========================= */
+/* SAVE TASKS */
+/* ========================= */
 
 async function saveTasks() {
 
   await setDoc(docRef, {
     data: tasks
   });
+
+  renderCalendar();
 }
 
+/* ========================= */
 /* RENDER CALENDAR */
+/* ========================= */
 
 function renderCalendar() {
 
@@ -206,7 +237,9 @@ function renderCalendar() {
   updateStats();
 }
 
-/* STATS */
+/* ========================= */
+/* UPDATE STATS */
+/* ========================= */
 
 function updateStats() {
 
@@ -227,6 +260,9 @@ function updateStats() {
     });
   });
 
+  const pending =
+    total - completed;
+
   taskCount.innerText =
     total;
 
@@ -234,10 +270,25 @@ function updateStats() {
     completed;
 
   pendingCount.innerText =
-    total - completed;
+    pending;
+
+  const progress =
+    total === 0
+    ? 0
+    : Math.round(
+        (completed / total) * 100
+      );
+
+  progressFill.style.width =
+    `${progress}%`;
+
+  progressText.innerText =
+    `${progress}%`;
 }
 
+/* ========================= */
 /* OPEN MODAL */
+/* ========================= */
 
 window.openModal = function(date) {
 
@@ -262,29 +313,39 @@ window.openModal = function(date) {
 
   renderTasks();
 
-  modal.style.display = "block";
+  modal.style.display =
+    "block";
 };
 
+/* ========================= */
 /* CLOSE MODAL */
+/* ========================= */
 
 closeModal.onclick = () => {
 
-  modal.style.display = "none";
+  modal.style.display =
+    "none";
 };
 
 window.onclick = (e) => {
 
   if (e.target === modal) {
 
-    modal.style.display = "none";
+    modal.style.display =
+      "none";
   }
 };
 
+/* ========================= */
 /* ADD TASK */
+/* ========================= */
 
 addTaskBtn.onclick = async () => {
 
-  if (!taskInput.value.trim()) return;
+  if (!taskInput.value.trim()) {
+
+    return;
+  }
 
   if (editIndex !== null) {
 
@@ -313,7 +374,24 @@ addTaskBtn.onclick = async () => {
   renderTasks();
 };
 
+/* ========================= */
+/* ENTER KEY SUPPORT */
+/* ========================= */
+
+taskInput.addEventListener(
+  "keypress",
+  (e) => {
+
+    if (e.key === "Enter") {
+
+      addTaskBtn.click();
+    }
+  }
+);
+
+/* ========================= */
 /* RENDER TASKS */
+/* ========================= */
 
 function renderTasks() {
 
@@ -323,6 +401,28 @@ function renderTasks() {
     tasks[selectedDate];
 
   if (!data) return;
+
+  /* EMPTY STATE */
+
+  if (data.tasks.length === 0) {
+
+    taskList.innerHTML = `
+
+      <div class="empty-state">
+
+        <h3>
+          🚀 No tasks yet
+        </h3>
+
+        <p>
+          Add your first task
+        </p>
+
+      </div>
+    `;
+
+    return;
+  }
 
   data.tasks.forEach((task, index) => {
 
@@ -336,7 +436,9 @@ function renderTasks() {
 
     li.innerHTML = `
 
-      <span>${task.text}</span>
+      <span>
+        ${task.text}
+      </span>
 
       <div class="task-actions">
 
@@ -365,9 +467,12 @@ function renderTasks() {
   });
 }
 
-/* DONE */
+/* ========================= */
+/* TOGGLE DONE */
+/* ========================= */
 
-window.toggleDone = async function(index) {
+window.toggleDone =
+async function(index) {
 
   tasks[selectedDate]
     .tasks[index]
@@ -381,7 +486,9 @@ window.toggleDone = async function(index) {
   renderTasks();
 };
 
-/* EDIT */
+/* ========================= */
+/* EDIT TASK */
+/* ========================= */
 
 window.editTask = function(index) {
 
@@ -393,9 +500,12 @@ window.editTask = function(index) {
   editIndex = index;
 };
 
-/* DELETE */
+/* ========================= */
+/* DELETE TASK */
+/* ========================= */
 
-window.deleteTask = async function(index) {
+window.deleteTask =
+async function(index) {
 
   tasks[selectedDate]
     .tasks.splice(index, 1);
@@ -405,9 +515,12 @@ window.deleteTask = async function(index) {
   renderTasks();
 };
 
-/* STATUS COLOR */
+/* ========================= */
+/* STATUS COLORS */
+/* ========================= */
 
-window.setColor = async function(color) {
+window.setColor =
+async function(color) {
 
   tasks[selectedDate]
     .status = color;
@@ -415,7 +528,9 @@ window.setColor = async function(color) {
   await saveTasks();
 };
 
+/* ========================= */
 /* MONTH NAVIGATION */
+/* ========================= */
 
 document
 .getElementById("prevMonth")
@@ -438,3 +553,29 @@ document
 
   renderCalendar();
 };
+
+/* ========================= */
+/* LIVE CLOCK */
+/* ========================= */
+
+function updateClock() {
+
+  const now = new Date();
+
+  document.getElementById(
+    "liveClock"
+  ).innerText =
+    now.toLocaleString(
+      "en-US",
+      {
+        weekday: "long",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric"
+      }
+    );
+}
+
+setInterval(updateClock, 1000);
+
+updateClock();
