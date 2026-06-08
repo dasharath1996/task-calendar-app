@@ -1,94 +1,220 @@
+<!-- ========================= -->
+<!-- UPDATED index.html -->
+<!-- ========================= -->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Advanced To-Do Calendar</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>To Do List Calendar</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
+
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
 </head>
+
 <body>
+
   <div class="bg-animation"></div>
 
   <header class="app-header">
-    <h1>✨ Dynamic To-Do Calendar</h1>
-    <p>Realtime task management across all your devices</p>
+
+    <h1>✨ To Do List Calendar</h1>
+
+    <p>
+      Beautiful realtime task management with Firebase sync
+    </p>
+
   </header>
 
-  <div class="live-clock" id="liveClock"></div>
+  <!-- LIVE CLOCK -->
+  <div
+    class="live-clock"
+    id="liveClock"
+  ></div>
 
   <div class="container">
+
+    <!-- STATS -->
     <div class="top-bar">
+
       <div class="stats-card">
+
         <h2 id="taskCount">0</h2>
+
         <span>Total Tasks</span>
+
       </div>
+
       <div class="stats-card">
+
         <h2 id="completedCount">0</h2>
+
         <span>Completed</span>
+
       </div>
+
       <div class="stats-card">
+
         <h2 id="pendingCount">0</h2>
+
         <span>Pending</span>
+
       </div>
+
     </div>
 
-    <div class="progress-section">
-      <div class="progress-info">
-        <span>Overall Progress</span>
-        <span id="progressText">0%</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-    </div>
-
+    <!-- MONTH NAV -->
     <div class="header">
-      <button id="prevMonth" aria-label="Previous Month">❮</button>
+
+      <button id="prevMonth">❮</button>
+
       <h1 id="monthYear"></h1>
-      <button id="nextMonth" aria-label="Next Month">❯</button>
+
+      <button id="nextMonth">❯</button>
+
     </div>
 
-    <div class="weekdays">
-      <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+    <!-- PROGRESS -->
+    <div class="progress-section">
+
+      <div class="progress-info">
+
+        <span>Task Progress</span>
+
+        <span id="progressText">0%</span>
+
+      </div>
+
+      <div class="progress-bar">
+
+        <div
+          class="progress-fill"
+          id="progressFill"
+        ></div>
+
+      </div>
+
     </div>
-    <div class="calendar" id="calendar"></div>
+
+    <!-- WEEKDAYS -->
+    <div class="weekdays">
+
+      <div>Sun</div>
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+      <div>Sat</div>
+
+    </div>
+
+    <!-- CALENDAR -->
+    <div
+      class="calendar"
+      id="calendar"
+    ></div>
+
   </div>
 
-  <div class="modal" id="taskModal">
+  <!-- MODAL -->
+  <div
+    class="modal"
+    id="taskModal"
+  >
+
     <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
+
+      <span class="close">&times;</span>
+
       <h2 id="selectedDate"></h2>
-      
+
       <div class="task-input">
-        <input type="text" id="taskInput" placeholder="What needs to be done?" />
-        <select id="taskPriority" class="priority-select">
-          <option value="low">Low</option>
-          <option value="medium" selected>Med</option>
-          <option value="high">High</option>
-        </select>
-        <button id="addTaskBtn">Add</button>
+
+        <input
+          type="text"
+          id="taskInput"
+          placeholder="Enter your task..."
+        />
+
+        <button id="addTaskBtn">
+          Add
+        </button>
+
       </div>
 
       <ul id="taskList"></ul>
 
+      <!-- STATUS -->
       <div class="color-buttons">
-        <button onclick="setColor('green')">✅ Productive</button>
-        <button onclick="setColor('red')">❌ Busy</button>
-        <button onclick="setColor(null)">🔄 Reset Day</button>
+
+        <button onclick="setColor('green')">
+          ✅ Productive
+        </button>
+
+        <button onclick="setColor('red')">
+          ❌ Busy
+        </button>
+
+        <button onclick="setColor(null)">
+          🔄 Reset
+        </button>
+
       </div>
+
     </div>
+
   </div>
 
+  <!-- FOOTER -->
   <footer class="footer">
+
     <div class="footer-content">
-      <p>© 2026 All Rights Reserved</p>
-      <p>Developed with ❤️ by <strong>Mr. Dasharath Kumar</strong></p>
+
+      <p>
+        © 2026 All Rights Reserved
+      </p>
+
+      <p>
+        Developed with ❤️ by
+        <strong>Mr. Dasharath Kumar</strong>
+      </p>
+
+      <a
+        href="https://www.linkedin.com/in/dasharath-kumar-74983a211/"
+        target="_blank"
+      >
+        Connect on LinkedIn
+      </a>
+
     </div>
+
   </footer>
 
-  <script type="module" src="script.js"></script>
+  <script
+    type="module"
+    src="script.js"
+  ></script>
+
 </body>
 </html>
